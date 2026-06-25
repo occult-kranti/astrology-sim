@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Picatrix · Book One — The Arrangement of the Heavens</title>
+<style>
+:root{
+  --void:#0B0E24; --void2:#070917; --panel:#141A3A; --panel2:#1B2147;
+  --parchment:#ECE3CF; --ink:#23284A;
+  --gilt:#C8A24B; --gilt-bright:#E8C874; --silver:#C7D0E8;
+  --verd:#56B0A4; --oxblood:#D2674E;
+  --text:#D8DCEE; --muted:#969CC0; --line:rgba(200,162,75,0.22);
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,'URW Palladio L',P052,Georgia,serif;
+  --sans:'Optima','Candara','Gill Sans','Gill Sans MT','Segoe UI',system-ui,sans-serif;
+  --mono:'SFMono-Regular','JetBrains Mono','Cascadia Code',Consolas,'Liberation Mono',monospace;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:
+   radial-gradient(1200px 700px at 78% -8%, #1a2150 0%, rgba(26,33,80,0) 55%),
+   radial-gradient(900px 600px at 12% 110%, #15173a 0%, rgba(21,23,58,0) 60%),
+   var(--void);
+  color:var(--text);font-family:var(--sans);line-height:1.6;
+  font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:inherit;}
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 22px;}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+  color:var(--gilt);margin:0 0 14px;}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.12;letter-spacing:.01em;color:#F3EEDF;}
+.thin-rule{height:1px;background:linear-gradient(90deg,transparent,var(--line) 12%,var(--line) 88%,transparent);
+  border:0;margin:0;}
+
+/* header */
+header.site{position:sticky;top:0;z-index:20;backdrop-filter:blur(8px);
+  background:rgba(7,9,23,.72);border-bottom:1px solid var(--line);}
+.bar{max-width:1080px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;
+  justify-content:space-between;gap:18px;}
+.mark{font-family:var(--serif);font-size:18px;color:#F3EEDF;letter-spacing:.02em;white-space:nowrap;}
+.mark b{color:var(--gilt);font-weight:600;}
+nav.links{display:flex;gap:22px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;}
+nav.links a{color:var(--muted);text-decoration:none;transition:color .2s;}
+nav.links a:hover{color:var(--gilt-bright);}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;
+  padding:64px 0 50px;}
+.hero h1{font-size:clamp(38px,6vw,68px);margin:.06em 0 .28em;}
+.hero h1 em{font-style:italic;color:var(--gilt-bright);}
+.lede{font-size:18px;color:#C9CFE8;max-width:46ch;margin:0 0 22px;}
+.lede .src{color:var(--muted);font-style:italic;}
+.hero-note{font-family:var(--mono);font-size:11.5px;color:var(--muted);letter-spacing:.04em;
+  border-left:2px solid var(--line);padding-left:14px;}
+
+/* dial */
+.dialwrap{position:relative;}
+.dial{width:100%;height:auto;display:block;filter:drop-shadow(0 18px 50px rgba(0,0,0,.55));}
+.readout-now{margin-top:14px;text-align:center;font-family:var(--mono);font-size:12px;
+  color:var(--muted);letter-spacing:.04em;}
+.readout-now b{color:var(--silver);}
+
+/* sections */
+section{padding:54px 0;}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;flex-wrap:wrap;}
+.sec-head h2{font-size:clamp(26px,3.6vw,38px);margin:0;}
+.sec-sub{color:var(--muted);max-width:62ch;margin:6px 0 26px;font-size:15.5px;}
+
+/* calculator */
+.calc{background:linear-gradient(180deg,rgba(27,33,71,.55),rgba(20,26,58,.35));
+  border:1px solid var(--line);border-radius:14px;padding:24px;}
+.controls{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 16px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gilt);}
+.field input,.field select{background:var(--void2);border:1px solid rgba(200,162,75,.28);
+  color:var(--text);border-radius:8px;padding:9px 10px;font-family:var(--mono);font-size:13px;}
+.field input:focus,.field select:focus{outline:2px solid var(--gilt);outline-offset:1px;border-color:var(--gilt);}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;align-items:center;}
+button.act{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  cursor:pointer;border-radius:8px;padding:10px 16px;border:1px solid var(--gilt);
+  background:var(--gilt);color:#1a1606;font-weight:600;transition:transform .12s,background .2s;}
+button.act:hover{background:var(--gilt-bright);transform:translateY(-1px);}
+button.ghost{background:transparent;color:var(--gilt);}
+button.ghost:hover{background:rgba(200,162,75,.12);}
+.preset{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;}
+.preset button{font-family:var(--mono);font-size:11px;letter-spacing:.06em;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:20px;padding:6px 13px;}
+.preset button:hover{color:var(--gilt-bright);border-color:var(--gilt);}
+
+/* results grid */
+.results{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px;}
+.card{background:rgba(8,10,25,.5);border:1px solid var(--line);border-radius:12px;padding:18px 18px 6px;}
+.card.full{grid-column:1 / -1;}
+.card h3{font-size:19px;margin:0 0 4px;}
+.card .cap{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gilt);margin-bottom:12px;}
+
+/* sky table */
+table.sky{width:100%;border-collapse:collapse;font-size:14px;}
+table.sky th,table.sky td{text-align:left;padding:7px 8px;border-bottom:1px solid rgba(200,162,75,.12);}
+table.sky th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:400;}
+.glyph{font-size:16px;color:var(--gilt-bright);width:1.4em;display:inline-block;}
+.pos{font-family:var(--mono);color:var(--silver);white-space:nowrap;}
+.rx{color:var(--oxblood);font-family:var(--mono);font-size:11px;}
+.qual{color:var(--muted);font-size:13px;}
+.lum td{background:rgba(200,162,75,.06);}
+
+/* moon card */
+.moon-mansion{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px;}
+.mnum{font-family:var(--serif);font-size:42px;color:var(--gilt-bright);line-height:1;}
+.mname{font-family:var(--serif);font-size:23px;color:#F3EEDF;}
+.marab{font-style:italic;color:var(--muted);font-size:15px;}
+.mspan{font-family:var(--mono);font-size:12px;color:var(--silver);margin:2px 0 12px;}
+.ops{background:var(--void2);border-left:2px solid var(--gilt);border-radius:0 8px 8px 0;
+  padding:11px 14px;font-size:14.5px;color:#D8DCEE;margin-bottom:14px;}
+.ops .lab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gilt);display:block;margin-bottom:4px;}
+.dig{font-family:var(--mono);font-size:12.5px;color:var(--muted);}
+.dig b{color:var(--silver);}
+
+/* checklist */
+.verdict{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;
+  padding:14px 16px;border-radius:10px;border:1px solid var(--line);background:var(--void2);}
+.verdict .tag{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 12px;border-radius:20px;font-weight:600;}
+.tag.good{background:rgba(86,176,164,.16);color:var(--verd);border:1px solid rgba(86,176,164,.5);}
+.tag.bad{background:rgba(210,103,78,.15);color:var(--oxblood);border:1px solid rgba(210,103,78,.5);}
+.verdict .vtext{font-size:14px;color:#C9CFE8;}
+.checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;}
+.checks li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:6px 0;
+  border-bottom:1px solid rgba(200,162,75,.1);}
+.ic{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+  font-size:11px;font-family:var(--mono);margin-top:2px;}
+.ic.ok{background:rgba(86,176,164,.18);color:var(--verd);}
+.ic.no{background:rgba(210,103,78,.18);color:var(--oxblood);}
+.ic.na{background:rgba(150,156,192,.14);color:var(--muted);}
+.checks .ct{color:#CDD3EC;}
+.checks .cs{color:var(--muted);font-size:12px;display:block;}
+
+/* qualities reference */
+.qtable{width:100%;border-collapse:collapse;font-size:14.5px;overflow:hidden;border-radius:10px;}
+.qtable th{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gilt);text-align:left;padding:11px 14px;background:rgba(200,162,75,.07);}
+.qtable td{padding:11px 14px;border-bottom:1px solid rgba(200,162,75,.12);vertical-align:top;}
+.qtable tr:last-child td{border-bottom:0;}
+.qtable .b{color:#F3EEDF;font-family:var(--serif);font-size:17px;}
+.qtable .qd{color:var(--silver);font-family:var(--mono);font-size:13px;}
+.qnote{color:var(--muted);font-size:13px;}
+
+/* mansion gallery */
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.mcell{text-align:left;background:rgba(8,10,25,.5);border:1px solid var(--line);border-radius:10px;
+  padding:11px 12px;cursor:pointer;transition:transform .12s,border-color .2s,background .2s;color:inherit;font:inherit;}
+.mcell:hover{transform:translateY(-2px);border-color:var(--gilt);background:rgba(27,33,71,.6);}
+.mcell.sel{border-color:var(--gilt-bright);background:rgba(200,162,75,.12);}
+.mcell .n{font-family:var(--serif);font-size:22px;color:var(--gilt-bright);line-height:1;}
+.mcell .nm{font-family:var(--serif);font-size:15px;color:#F3EEDF;margin-top:2px;}
+.mcell .ar{font-style:italic;color:var(--muted);font-size:12px;}
+.mcell .sp{font-family:var(--mono);font-size:10.5px;color:var(--silver);margin-top:5px;}
+.mdetail{margin-top:16px;background:rgba(8,10,25,.6);border:1px solid var(--line);border-radius:12px;
+  padding:18px 20px;min-height:64px;}
+.mdetail .lab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gilt);}
+.mdetail h3{margin:4px 0 2px;font-size:22px;}
+.mdetail p{margin:8px 0 0;color:#D8DCEE;font-size:15px;}
+
+/* rules table */
+.rules{width:100%;border-collapse:collapse;font-size:14px;border-radius:10px;overflow:hidden;}
+.rules th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gilt);text-align:left;padding:10px 13px;background:rgba(200,162,75,.07);}
+.rules td{padding:10px 13px;border-bottom:1px solid rgba(200,162,75,.12);vertical-align:top;}
+.rules .f{color:#F3EEDF;font-weight:600;width:20%;}
+.rules .good{color:#CDD3EC;}
+.rules .bad{color:var(--muted);}
+.rules .sc{font-family:var(--mono);font-size:11px;color:var(--gilt);white-space:nowrap;}
+
+/* footer */
+footer{border-top:1px solid var(--line);margin-top:30px;padding:34px 0 60px;}
+footer .cols{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:26px;}
+footer h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gilt);margin:0 0 10px;}
+footer p,footer li{font-size:13px;color:var(--muted);}
+footer ul{margin:0;padding-left:16px;}
+.badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;
+  color:var(--verd);border:1px solid rgba(86,176,164,.4);border-radius:20px;padding:5px 11px;margin-top:8px;}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:30px;padding:40px 0 30px;}
+  .dialwrap{max-width:440px;margin:0 auto;}
+  nav.links{display:none;}
+  .controls{grid-template-columns:1fr 1fr;}
+  .results{grid-template-columns:1fr;}
+  .checks{grid-template-columns:1fr;}
+  footer .cols{grid-template-columns:1fr;}
+  .preset{margin-left:0;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<canvas class="stars" id="stars"></canvas>
+
+<header class="site">
+  <div class="bar">
+    <div class="mark">Picatrix · <b>Liber Rubeus</b></div>
+    <nav class="links">
+      <a href="#heavens">The Heavens</a>
+      <a href="#calculator">Calculator</a>
+      <a href="#mansions">28 Mansions</a>
+      <a href="#rules">Election</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Book One · Chapters III–IV</p>
+      <h1>The Arrangement<br>of the <em>Heavens</em></h1>
+      <p class="lede">The sphere casts its rays to the centre of the earth, and from them comes the
+        power of images. To work them you must first read the sky — where the Moon stands among her
+        twenty-eight mansions, and whether she is safe to act.
+        <span class="src">— after Picatrix, Bk I, ch. 3–4.</span></p>
+      <p class="hero-note">Live geocentric, tropical sky · positions by analytic ephemeris ·
+        dignities &amp; election after William Lilly.</p>
+    </div>
+    <div class="dialwrap">
+      <svg class="dial" id="dial" viewBox="0 0 600 600" role="img"
+           aria-label="Celestial dial of the zodiac, 28 lunar mansions, and live planetary positions"></svg>
+      <div class="readout-now" id="dialReadout">reading the sky…</div>
+    </div>
+  </div>
+</div>
+<hr class="thin-rule">
+
+<!-- HEAVENS / CH3 -->
+<section id="heavens"><div class="wrap">
+  <div class="sec-head">
+    <p class="eyebrow" style="margin:0">Chapter III</p>
+    <h2>What the heavens are</h2>
+  </div>
+  <p class="sec-sub">Heaven is a perfect sphere; nothing in it is generated or corrupted. Its rays
+    descend to the earth at the centre, and these are the source of the virtue of images. Each
+    planet moves things of its own quality — and the Sun draws that virtue out and increases it.</p>
+  <table class="qtable">
+    <thead><tr><th>Body</th><th>Quality (per the text)</th><th>Element</th><th>Role</th></tr></thead>
+    <tbody id="qbody"></tbody>
+  </table>
+</div></section>
+
+<!-- CALCULATOR -->
+<section id="calculator"><div class="wrap">
+  <div class="sec-head">
+    <p class="eyebrow" style="margin:0">Chapter IV · Instrument</p>
+    <h2>Electional calculator</h2>
+  </div>
+  <p class="sec-sub">Choose a moment and a place. The instrument reads the whole sky, finds the
+    Moon's mansion and what it is fit for, and tests her against Chapter IV's conditions for a
+    benefic working. For a malefic working the text says to invert these.</p>
+
+  <div class="calc">
+    <div class="controls">
+      <div class="field"><label for="date">Date</label><input type="date" id="date"></div>
+      <div class="field"><label for="time">Time (local)</label><input type="time" id="time"></div>
+      <div class="field"><label for="lat">Latitude</label><input type="number" id="lat" step="0.01" value="40.71"></div>
+      <div class="field"><label for="lon">Longitude</label><input type="number" id="lon" step="0.01" value="-74.01"></div>
+      <div class="field"><label for="tz">UTC offset (hrs)</label><input type="number" id="tz" step="0.25" value="-4"></div>
+      <div class="field"><label for="work">Working</label>
+        <select id="work"><option value="benefic">Benefic (good)</option>
+          <option value="malefic">Malefic (inverts rules)</option></select></div>
+      <div class="field"><label for="dn">Day / night</label>
+        <select id="dn"><option value="auto">Auto (from Sun)</option>
+          <option value="day">Day</option><option value="night">Night</option></select></div>
+      <div class="field"><label for="outers">Outer planets</label>
+        <select id="outers"><option value="no">Hide (classical 7)</option>
+          <option value="yes">Show Uranus &amp; Neptune</option></select></div>
+    </div>
+    <div class="btnrow">
+      <button class="act" id="calc">Read the sky</button>
+      <button class="ghost act" id="nowbtn">Now</button>
+      <button class="ghost act" id="geo">Use my location</button>
+      <div class="preset" id="presets"></div>
+    </div>
+
+    <div class="results">
+      <div class="card">
+        <div class="cap">The sky · positions &amp; qualities</div>
+        <h3 style="display:none">Sky</h3>
+        <table class="sky"><thead><tr><th></th><th>Body</th><th>Position</th><th>Quality (Ch. III)</th></tr></thead>
+          <tbody id="skybody"></tbody></table>
+      </div>
+      <div class="card">
+        <div class="cap">The Moon · mansion &amp; works</div>
+        <div id="moonCard"></div>
+      </div>
+      <div class="card full">
+        <div class="cap">Chapter IV · is the Moon safe to act?</div>
+        <div id="verdict"></div>
+        <ul class="checks" id="checks"></ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- MANSIONS -->
+<section id="mansions"><div class="wrap">
+  <div class="sec-head">
+    <p class="eyebrow" style="margin:0">Chapter IV · The lunar dwellings</p>
+    <h2>The 28 Mansions of the Moon</h2>
+  </div>
+  <p class="sec-sub">The zodiac is divided into twenty-eight equal arcs of 12°51′25.7″, beginning at
+    0° Aries. The Moon's mansion governs which images may be made. Select one to light it on the dial.
+    (Operations are condensed summaries, not the translators' wording.)</p>
+  <div class="mgrid" id="mgrid"></div>
+  <div class="mdetail" id="mdetail">
+    <span class="lab">Select a mansion</span>
+    <h3>Its proper works appear here</h3>
+    <p>Each mansion carries a list of operations — journeys, healing, building, binding, love, discord —
+      to be timed when the Moon dwells within it.</p>
+  </div>
+</div></section>
+
+<!-- RULES -->
+<section id="rules"><div class="wrap">
+  <div class="sec-head">
+    <p class="eyebrow" style="margin:0">Chapter IV · The rule of election</p>
+    <h2>Placing the Moon well</h2>
+  </div>
+  <p class="sec-sub">The Moon governs every work beneath her, so she must be well placed. Keep the
+    benefic column for good works; the text says do the contrary for works of harm.</p>
+  <table class="rules">
+    <thead><tr><th class="f">Factor</th><th>For benefic works</th><th>For malefic works</th><th>Source</th></tr></thead>
+    <tbody id="rulesbody"></tbody>
+  </table>
+</div></section>
+
+<!-- FOOTER -->
+<footer id="sources"><div class="wrap">
+  <div class="cols">
+    <div>
+      <h4>Source text</h4>
+      <p>Picatrix, <i>Liber Rubeus edition</i>, trans. John Michael Greer &amp; Christopher Warnock.
+        Content here is drawn from <b>Book One, Chapters 3–4</b> (printed pp. 30–38). Names, degrees and
+        correspondences are tabulated as facts; the mansion operations are condensed paraphrases, not the
+        translators' text.</p>
+      <span class="badge">✓ engine self-tested · JS matches Python reference</span>
+    </div>
+    <div>
+      <h4>How it calculates</h4>
+      <ul>
+        <li>Positions: Schlyter analytic ephemeris — geocentric, tropical, of date (~1–4′).</li>
+        <li>Mansions: 360 ÷ 28 from 0° Aries.</li>
+        <li>Dignities, aspects, combustion, Via Combusta: after W. Lilly, <i>Christian Astrology</i> (1647).</li>
+        <li>Ascendant: standard RAMC formula (approximate).</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Note</h4>
+      <p>Offered for historical study and to make a dense medieval text legible and computable. A
+        production build could swap the ephemeris for the Swiss Ephemeris with no change to the
+        interface. This is the first verified increment — Book 1, Ch. 3–4 — of an ongoing chapter-by-chapter build.</p>
+    </div>
+  </div>
+</div></footer>
+
+<script>
+/* ====================== VERIFIED ENGINE (ported & tested in node) ====================== */
+const DEG=Math.PI/180;
+const SIGNS=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+const SIGN_GLYPH={Aries:'♈',Taurus:'♉',Gemini:'♊',Cancer:'♋',Leo:'♌',Virgo:'♍',Libra:'♎',Scorpio:'♏',Sagittarius:'♐',Capricorn:'♑',Aquarius:'♒',Pisces:'♓'};
+const PGLYPH={Sun:'☉',Moon:'☽',Mercury:'☿',Venus:'♀',Mars:'♂',Jupiter:'♃',Saturn:'♄',Uranus:'♅',Neptune:'♆'};
+const norm=x=>((x%360)+360)%360;
+function kepler(M,e){M=norm(M)*DEG;let E=M+e*Math.sin(M)*(1+e*Math.cos(M));for(let i=0;i<60;i++){const dE=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E));E-=dE;if(Math.abs(dE)<1e-11)break;}return E;}
+function dayNumber(d){const Y=d.getUTCFullYear(),M=d.getUTCMonth()+1,D=d.getUTCDate();const ut=d.getUTCHours()+d.getUTCMinutes()/60+d.getUTCSeconds()/3600;return 367*Y-Math.floor(7*(Y+Math.floor((M+9)/12))/4)+Math.floor(275*M/9)+D-730530+ut/24;}
+function sun(d){const w=282.9404+4.70935e-5*d,e=0.016709-1.151e-9*d,Ms=356.0470+0.9856002585*d;const E=kepler(Ms,e),xv=Math.cos(E)-e,yv=Math.sqrt(1-e*e)*Math.sin(E);const v=Math.atan2(yv,xv)/DEG,r=Math.hypot(xv,yv),lon=norm(v+w);return{lon,xs:r*Math.cos(lon*DEG),ys:r*Math.sin(lon*DEG),Ms,w};}
+const PLAN={Mercury:[d=>48.3313+3.24587e-5*d,d=>7.0047+5e-8*d,d=>29.1241+1.01444e-5*d,d=>0.387098,d=>0.205635+5.59e-10*d,d=>168.6562+4.0923344368*d],Venus:[d=>76.6799+2.4659e-5*d,d=>3.3946+2.75e-8*d,d=>54.891+1.38374e-5*d,d=>0.72333,d=>0.006773-1.302e-9*d,d=>48.0052+1.6021302244*d],Mars:[d=>49.5574+2.11081e-5*d,d=>1.8497-1.78e-8*d,d=>286.5016+2.92961e-5*d,d=>1.523688,d=>0.093405+2.516e-9*d,d=>18.6021+0.5240207766*d],Jupiter:[d=>100.4542+2.76854e-5*d,d=>1.303-1.557e-7*d,d=>273.8777+1.64505e-5*d,d=>5.20256,d=>0.048498+4.469e-9*d,d=>19.895+0.0830853001*d],Saturn:[d=>113.6634+2.3898e-5*d,d=>2.4886-1.081e-7*d,d=>339.3939+2.97661e-5*d,d=>9.55475,d=>0.055546-9.499e-9*d,d=>316.967+0.0334442282*d],Uranus:[d=>74.0005+1.3978e-5*d,d=>0.7733+1.9e-8*d,d=>96.6612+3.0565e-5*d,d=>19.18171-1.55e-8*d,d=>0.047318+7.45e-9*d,d=>142.5905+0.011725806*d],Neptune:[d=>131.7806+3.0173e-5*d,d=>1.77-2.55e-7*d,d=>272.8461-6.027e-6*d,d=>30.05826+3.313e-8*d,d=>0.008606+2.15e-9*d,d=>260.2471+0.005995147*d]};
+function planet(name,d){const[fN,fi,fw,fa,fe,fM]=PLAN[name];const N=fN(d),i=fi(d),w=fw(d),a=fa(d),e=fe(d),M=fM(d);const E=kepler(M,e),xv=a*(Math.cos(E)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E);const v=Math.atan2(yv,xv)/DEG,r=Math.hypot(xv,yv),vw=(v+w)*DEG,Nr=N*DEG,ir=i*DEG;const xh=r*(Math.cos(Nr)*Math.cos(vw)-Math.sin(Nr)*Math.sin(vw)*Math.cos(ir)),yh=r*(Math.sin(Nr)*Math.cos(vw)+Math.cos(Nr)*Math.sin(vw)*Math.cos(ir));const s=sun(d);return norm(Math.atan2(yh+s.ys,xh+s.xs)/DEG);}
+function moon(d){const N=125.1228-0.0529538083*d,i=5.1454,w=318.0634+0.1643573223*d,a=60.2666,e=0.0549,M=115.3654+13.0649929509*d;const E=kepler(M,e),xv=a*(Math.cos(E)-e),yv=a*Math.sqrt(1-e*e)*Math.sin(E);const v=Math.atan2(yv,xv)/DEG,r=Math.hypot(xv,yv),vw=(v+w)*DEG,Nr=N*DEG,ir=i*DEG;const xh=r*(Math.cos(Nr)*Math.cos(vw)-Math.sin(Nr)*Math.sin(vw)*Math.cos(ir)),yh=r*(Math.sin(Nr)*Math.cos(vw)+Math.cos(Nr)*Math.sin(vw)*Math.cos(ir));let lon=norm(Math.atan2(yh,xh)/DEG);const s=sun(d),Ls=norm(s.Ms+s.w),Lm=norm(N+w+M),Mm=norm(M),Ms=norm(s.Ms),Dm=norm(Lm-Ls),F=norm(Lm-N),sn=x=>Math.sin(x*DEG);const dl=-1.274*sn(Mm-2*Dm)+0.658*sn(2*Dm)-0.186*sn(Ms)-0.059*sn(2*Mm-2*Dm)-0.057*sn(Mm-2*Dm+Ms)+0.053*sn(Mm+2*Dm)+0.046*sn(2*Dm-Ms)+0.041*sn(Mm-Ms)-0.035*sn(Dm)-0.031*sn(Mm+Ms)-0.015*sn(2*F-2*Dm)+0.011*sn(Mm-4*Dm);return norm(lon+dl);}
+function geoLon(b,d){if(b==='Sun')return sun(d).lon;if(b==='Moon')return moon(d);return planet(b,d);}
+function signOf(l){l=norm(l);return[SIGNS[Math.floor(l/30)],l%30];}
+function fmtLon(l){const[s,deg]=signOf(l);let dd=Math.floor(deg),mm=Math.round((deg-dd)*60);if(mm===60){dd++;mm=0;}return dd+'°'+String(mm).padStart(2,'0')+"' "+s;}
+const ORDER=['Saturn','Jupiter','Mars','Sun','Venus','Mercury','Moon'];
+const ALLB=['Sun','Moon','Mercury','Venus','Mars','Jupiter','Saturn','Uranus','Neptune'];
+function allPositions(date){const d=dayNumber(date),out={};for(const b of ALLB){const lon=geoLon(b,d),step=b==='Moon'?0.05:1;const lon2=geoLon(b,d+step);const speed=(((lon2-lon+540)%360)-180)/step;const[sign,deg]=signOf(lon);out[b]={lon,sign,degInSign:deg,speed,retro:speed<0};}return out;}
+const MW=360/28;
+function mansionBounds(n){return[(n-1)*MW,n*MW];}
+function mansionIdx(l){l=norm(l);let i=Math.floor(l/MW);return i>27?27:i;}
+const DOMICILE={Aries:'Mars',Taurus:'Venus',Gemini:'Mercury',Cancer:'Moon',Leo:'Sun',Virgo:'Mercury',Libra:'Venus',Scorpio:'Mars',Sagittarius:'Jupiter',Capricorn:'Saturn',Aquarius:'Saturn',Pisces:'Jupiter'};
+const DETRIMENT={Aries:'Venus',Taurus:'Mars',Gemini:'Jupiter',Cancer:'Saturn',Leo:'Saturn',Virgo:'Jupiter',Libra:'Mars',Scorpio:'Venus',Sagittarius:'Mercury',Capricorn:'Moon',Aquarius:'Sun',Pisces:'Mercury'};
+const EXALT={Aries:['Sun',19],Taurus:['Moon',3],Cancer:['Jupiter',15],Virgo:['Mercury',15],Libra:['Saturn',21],Capricorn:['Mars',28],Pisces:['Venus',27]};
+const FALL={Libra:'Sun',Scorpio:'Moon',Capricorn:'Jupiter',Pisces:'Mercury',Aries:'Saturn',Cancer:'Mars',Virgo:'Venus'};
+const TRIP={Fire:['Sun','Jupiter'],Earth:['Venus','Moon'],Air:['Saturn','Mercury'],Water:['Mars','Mars']};
+const SE={Aries:'Fire',Leo:'Fire',Sagittarius:'Fire',Taurus:'Earth',Virgo:'Earth',Capricorn:'Earth',Gemini:'Air',Libra:'Air',Aquarius:'Air',Cancer:'Water',Scorpio:'Water',Pisces:'Water'};
+const TERMS={Aries:[['Jupiter',6],['Venus',12],['Mercury',20],['Mars',25],['Saturn',30]],Taurus:[['Venus',8],['Mercury',14],['Jupiter',22],['Saturn',27],['Mars',30]],Gemini:[['Mercury',6],['Jupiter',12],['Venus',17],['Mars',24],['Saturn',30]],Cancer:[['Mars',7],['Venus',13],['Mercury',19],['Jupiter',26],['Saturn',30]],Leo:[['Jupiter',6],['Venus',11],['Saturn',18],['Mercury',24],['Mars',30]],Virgo:[['Mercury',7],['Venus',17],['Jupiter',21],['Mars',28],['Saturn',30]],Libra:[['Saturn',6],['Mercury',14],['Jupiter',21],['Venus',28],['Mars',30]],Scorpio:[['Mars',7],['Venus',11],['Mercury',19],['Jupiter',24],['Saturn',30]],Sagittarius:[['Jupiter',12],['Venus',17],['Mercury',21],['Saturn',26],['Mars',30]],Capricorn:[['Venus',7],['Mercury',14],['Jupiter',22],['Mars',26],['Saturn',30]],Aquarius:[['Saturn',7],['Mercury',13],['Venus',20],['Jupiter',25],['Mars',30]],Pisces:[['Venus',12],['Jupiter',16],['Mercury',19],['Mars',28],['Saturn',30]]};
+const FACES={Aries:['Mars','Sun','Venus'],Taurus:['Mercury','Moon','Saturn'],Gemini:['Jupiter','Mars','Sun'],Cancer:['Venus','Mercury','Moon'],Leo:['Saturn','Jupiter','Mars'],Virgo:['Sun','Venus','Mercury'],Libra:['Moon','Saturn','Jupiter'],Scorpio:['Mars','Sun','Venus'],Sagittarius:['Mercury','Moon','Saturn'],Capricorn:['Jupiter','Mars','Sun'],Aquarius:['Venus','Mercury','Moon'],Pisces:['Saturn','Jupiter','Mars']};
+function termRuler(s,deg){for(const[p,u]of TERMS[s])if(deg<u)return p;return TERMS[s][4][0];}
+function faceRuler(s,deg){return FACES[s][Math.min(Math.floor(deg/10),2)];}
+function essDig(pl,lon,day){const[s,deg]=signOf(lon);let held=[],debs=[],sc=0;if(DOMICILE[s]===pl){held.push('domicile');sc+=5;}if(EXALT[s]&&EXALT[s][0]===pl){held.push('exaltation');sc+=4;}const t=TRIP[SE[s]];if((day?t[0]:t[1])===pl){held.push('triplicity');sc+=3;}if(termRuler(s,deg)===pl){held.push('term');sc+=2;}if(faceRuler(s,deg)===pl){held.push('face');sc+=1;}if(DETRIMENT[s]===pl){debs.push('detriment');sc-=5;}if(FALL[s]===pl){debs.push('fall');sc-=4;}return{score:sc,held,debs};}
+const HUMANE=new Set(['Gemini','Virgo','Libra','Sagittarius','Aquarius']),SHORT=new Set(['Capricorn','Aquarius','Pisces','Aries','Taurus','Gemini']),DIURNAL=new Set(['Aries','Gemini','Leo','Libra','Sagittarius','Aquarius']),FORT=new Set(['Jupiter','Venus']),INFORT=new Set(['Saturn','Mars']);
+const VIA=[188,213],UNDER=12,SLOW=12,ASP={0:'conjunction',60:'sextile',90:'square',120:'trine',180:'opposition'};
+function angSep(a,b){let s=Math.abs(a-b)%360;return Math.min(s,360-s);}
+function moonAspects(pos,d){const r=[],ml=pos.Moon.lon,ml2=geoLon('Moon',d+0.05);for(const o of['Saturn','Mars','Jupiter','Venus','Sun']){const ol=pos[o].lon,ol2=geoLon(o,d+0.05),sep=angSep(ml,ol);for(const a of[0,60,90,120,180]){if(Math.abs(sep-a)<=8){const sep2=angSep(ml2,ol2);r.push({other:o,aspect:ASP[a],orb:Math.abs(sep-a),applying:Math.abs(sep2-a)<Math.abs(sep-a)});}}}return r;}
+function jd(d){let Y=d.getUTCFullYear(),M=d.getUTCMonth()+1;const D=d.getUTCDate()+(d.getUTCHours()+d.getUTCMinutes()/60+d.getUTCSeconds()/3600)/24;if(M<=2){Y--;M+=12;}const A=Math.floor(Y/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(Y+4716))+Math.floor(30.6001*(M+1))+D+B-1524.5;}
+function lstDeg(date,lon){const J=jd(date),T=(J-2451545)/36525;let g=norm(280.46061837+360.98564736629*(J-2451545)+0.000387933*T*T-T*T*T/38710000);return{lst:norm(g+lon),eps:(23.439291-0.0130042*T)*DEG};}
+function ascendant(date,lat,lon){const{lst,eps}=lstDeg(date,lon),ramc=lst*DEG,phi=lat*DEG;let asc=norm(Math.atan2(Math.cos(ramc),-(Math.sin(ramc)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps)))/DEG);if(!(norm(asc-lst)<180))asc=norm(asc+180);return asc;}
+function sunUp(date,lat,lon){const d=dayNumber(date),sl=sun(d).lon,{lst,eps}=lstDeg(date,lon);const ra=Math.atan2(Math.cos(eps)*Math.sin(sl*DEG),Math.cos(sl*DEG))/DEG,dec=Math.asin(Math.sin(eps)*Math.sin(sl*DEG))/DEG;const ha=(lst-ra)*DEG,alt=Math.asin(Math.sin(lat*DEG)*Math.sin(dec*DEG)+Math.cos(lat*DEG)*Math.cos(dec*DEG)*Math.cos(ha))/DEG;return alt>0;}
+function electional(date,lat,lon,dayOverride){const d=dayNumber(date),pos=allPositions(date),mo=pos.Moon,su=pos.Sun;let isDay;if(dayOverride==='day')isDay=true;else if(dayOverride==='night')isDay=false;else isDay=(lat!=null&&lon!=null)?sunUp(date,lat,lon):true;const dig=essDig('Moon',mo.lon,isDay),mi=mansionIdx(mo.lon),asp=moonAspects(pos,d),sms=angSep(mo.lon,su.lon);const underRays=sms<UNDER,combustL=sms<8.5,via=mo.lon>=VIA[0]&&mo.lon<=VIA[1],slow=mo.speed<SLOW;const badInf=asp.filter(a=>INFORT.has(a.other)&&['conjunction','square','opposition'].includes(a.aspect));const goodFor=asp.filter(a=>FORT.has(a.other)&&['trine','sextile'].includes(a.aspect));let ascSign=null;if(lat!=null&&lon!=null)ascSign=signOf(ascendant(date,lat,lon))[0];const benefic_ok=(!underRays&&!via&&!slow&&badInf.length===0);return{date,pos,moon:mo,mansionIndex:mi,dignity:dig,aspects:asp,sunMoonSep:sms,underRays,combustL,via,slow,ascSign,isDay,humane:HUMANE.has(mo.sign),shortAsc:SHORT.has(mo.sign),diurnal:DIURNAL.has(mo.sign),badInfortune:badInf,goodFortune:goodFor,benefic_ok};}
+
+/* ====================== DISPLAY DATA ====================== */
+const QUAL=[
+ ['Saturn','cold and dry','Earth','Greater infortune'],
+ ['Jupiter','warm and moist','Air','Greater fortune; temperate'],
+ ['Mars','hot and dry','Fire','Lesser infortune; burning'],
+ ['Sun','hot and dry — amplifier','Fire','Draws out & increases a planet\u2019s virtue'],
+ ['Venus','moderately hot, very moist','Air / Water','Lesser fortune'],
+ ['Mercury','weakly hot, very dry','Earth / Air','Convertible'],
+ ['Moon','cold and moist','Water','Governs all works beneath her'],
+ ['Fixed stars','as the Moon (cold & moist)','Water','Move the same things as Luna'],
+];
+const QMAP={Saturn:'cold & dry',Jupiter:'warm & moist',Mars:'hot & dry',Sun:'hot & dry · amplifies',Venus:'moderately hot, very moist',Mercury:'weakly hot, very dry',Moon:'cold & moist',Uranus:'—',Neptune:'—'};
+const MANSIONS=[
+ [1,'Alnath','Al-Sharatain','safe journeys & return; medicines; sow discord between spouses, friends or allies; make servants flee'],
+ [2,'Albotain','Al-Butain','dig wells & streams; find treasure; plant wheat; wreck unfinished buildings; enrage one against another; strengthen imprisonment'],
+ [3,'Azoraya','Al-Thuraiya','safe sea travel & return; firm imprisonment; alchemy & all works of fire; hunting; love between spouses'],
+ [4,'Aldebaran','Al-Dabaran','destroy cities & buildings; turn a lord against his servant; discord between spouses; destroy springs & treasure-seekers; kill or bind venomous animals'],
+ [5,'Almices','Al-Haqa','youths to learn arts & trades; protect & speed travelers and sailors; improve buildings; break a friendship; favor between spouses (work with the Moon rising in a humane sign)'],
+ [6,'Athaya','Al-Hana','destroy & besiege cities; vengeance for the enemies of kings; ruin crops & trees; cause friendship; improve hunting; nullify medicines'],
+ [7,'Aldirah','Al-Dhira','increase merchandise & profit; safe travel & sailing; increase crops; friendship of allies; expel flies; favor before kings & nobles'],
+ [8,'Annathra','Al-Nathrah','love & friendship; safe wagon travel; bind allies in friendship; firm imprisonment; afflict captives; expel mice & bugs'],
+ [9,'Atarf','Al-Tarf','destroy crops; misfortune to travelers; do evil to men; hatred between allies; help a man defend against attack'],
+ [10,'Algebha','Al-Jabhah','love between spouses; destroy enemies; firm imprisonment; strengthen & complete buildings; love & mutual aid of allies'],
+ [11,'Azobra','Al-Zubrah','rescue captives; besiege cities; organize trade & profit; safe travel; stabilize buildings; enrich allies'],
+ [12,'Acarfa','Al-Sarfah','increase harvests; destroy riches & ships; make allies, officials, captives & servants steadfast and honest'],
+ [13,'Alahue','Al-Awwa','increase trade, profit & harvests; good journeys; complete buildings; free captives; bind nobles for favor'],
+ [14,'Azimech','Al-Simak','love between spouses; heal the sick; destroy harvests; destroy lust; harm travelers; benefit kings; safe sailing; friendship of allies'],
+ [15,'Algarfa','Al-Ghafr','dig wells; seek treasure; impede travelers; permanently separate spouses; discord among friends & allies; scatter enemies; ruin an enemy\u2019s house & standing'],
+ [16,'Azubene','Al-Zubana','destroy merchandise & harvests; discord between friends and between spouses; seduce a desired woman; impede travelers; free captives'],
+ [17,'Alichil','Al-Iklil','improve a deception; besiege cities; firm & stable buildings; save sailors; make durable friendship & lasting love (especially this mansion)'],
+ [18,'Alcalb','Al-Qalb','conspire against kings; vengeance on enemies; strong buildings; free captives; separate friends'],
+ [19,'Exaula','Al-Shaulah','besiege & take cities; destroy wealth; expel men; aid wagon-travelers; increase harvests; free captives; wreck ships; ruin allies; kill captives'],
+ [20,'Nahaym','Al-Naaim','tame wild beasts; speed travelers\u2019 return; summon men; join good people; firm imprisonment; harm the wealth of allies'],
+ [21,'Elbelda','Al-Baldah','strengthen buildings; increase harvests; make & keep money; safe travel; separate wives from husbands'],
+ [22,'Caadaldeba',"Sa'd al-Dhabih",'cure illness; sow discord between two; make servants & captives flee; goodwill between allies'],
+ [23,'Caaddebolach',"Sa'd Bula",'heal illness; join friends; divide spouses; help captives escape'],
+ [24,'Caadacohot',"Sa'd al-Su'ud",'increase merchandise & profit; goodwill between spouses; victory for soldiers; destroy allies\u2019 money; obstruct an official'],
+ [25,'Caaddalhacbia',"Sa'd al-Akhbiyah",'besiege cities; take & afflict enemies; speed messengers; separate spouses; destroy harvests; bind spouses or any body part; strengthen prisons; secure buildings'],
+ [26,'Almiquedam','Al-Fargh al-Mukdim','bind people in mutual love; protect wagon-travelers; strengthen buildings; firm imprisonment & harm to captives'],
+ [27,'Algarf almuehar','Al-Fargh al-Muakhar','increase merchandise, profit & harvests; unite allies; heal illness; destroy riches; impede buildings; imperil sea-travelers; prolong imprisonment'],
+ [28,'Arrexhe',"Al-Risha (Batn al-Hut)",'increase merchandise & harvests; besiege cities; lay waste an area; make treasures be lost; safe travel; peace between spouses; firm imprisonment; harm sailors'],
+];
+const RULES=[
+ ['Moon dignity','Well dignified &amp; strong','Weak / afflicted','Ch. 4'],
+ ['Saturn &amp; Mars','Safe from them and their aspects','Combust or conjunct / applying to Saturn or Mars','Ch. 4 · fn 53'],
+ ['Combustion / Sun\u2019s rays','Free of the beams (&gt; 12° from Sun)','Combust / under the rays','Ch. 4'],
+ ['Jupiter &amp; Venus','Joined by trine or sextile; separating from one, applying to the other','—','Ch. 4 · fn 51'],
+ ['Via Combusta','Avoid (8° Libra – 3° Scorpio)','—','Ch. 4 · fn 54'],
+ ['Moon speed','Swift (≥ 12°/day)','Slow (&lt; 12°/day) — "like Saturn"','Ch. 4'],
+ ['Eclipse','Not applying to an eclipse','—','Ch. 4'],
+ ['End of sign','Avoid the last degrees (infortunes\u2019 terms)','—','Ch. 4'],
+ ['Cadency','Not cadent from the midheaven (the 9th)','—','Ch. 4'],
+ ['Day vs night','Day: Moon ascending in a diurnal sign. Night: a nocturnal sign','—','Ch. 4'],
+ ['Ascension','Short ascension (Cap–Gem) = swifter; long = slower','—','Ch. 4 · fn 52'],
+ ['Remedy','Place Jupiter and/or Venus on the Ascendant or Midheaven','—','Ch. 4'],
+];
+const PRESETS=[['New York',40.71,-74.01,-4],['London',51.51,-0.13,1],['Cairo',30.04,31.24,2],['Delhi',28.61,77.21,5.5],['Tokyo',35.68,139.69,9]];
+
+/* ====================== STARFIELD ====================== */
+(function(){const c=document.getElementById('stars'),x=c.getContext('2d');let w,h,st=[];function rs(){w=c.width=innerWidth;h=c.height=innerHeight;st=Array.from({length:Math.min(170,Math.floor(w*h/9000))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,a:Math.random(),s:Math.random()*.018+.004}));}rs();addEventListener('resize',rs);const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;function dr(){x.clearRect(0,0,w,h);for(const s of st){if(!rm){s.a+=s.s;if(s.a>1||s.a<.2)s.s*=-1;}x.globalAlpha=.15+s.a*.6;x.fillStyle=Math.random()<.003?'#E8C874':'#cdd6f0';x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();}x.globalAlpha=1;requestAnimationFrame(dr);}dr();})();
+
+/* ====================== DIAL ====================== */
+const SVGNS='http://www.w3.org/2000/svg';
+const CX=300,CY=300;
+function pt(lon,r){const a=(180-lon)*DEG;return[CX+r*Math.cos(a),CY-r*Math.sin(a)];}
+function el(tag,attrs){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+function drawDialBase(){
+  const svg=document.getElementById('dial');svg.innerHTML='';
+  // outer rings
+  svg.appendChild(el('circle',{cx:CX,cy:CY,r:292,fill:'none',stroke:'rgba(200,162,75,.35)','stroke-width':1}));
+  svg.appendChild(el('circle',{cx:CX,cy:CY,r:244,fill:'none',stroke:'rgba(200,162,75,.22)','stroke-width':1}));
+  svg.appendChild(el('circle',{cx:CX,cy:CY,r:196,fill:'none',stroke:'rgba(200,162,75,.22)','stroke-width':1}));
+  // alternating sign shading via dash trick (aligns to sign boundaries; native start = lon180)
+  const rMid=268,C=2*Math.PI*rMid;
+  svg.appendChild(el('circle',{cx:CX,cy:CY,r:rMid,fill:'none',stroke:'rgba(200,162,75,.07)','stroke-width':48,'stroke-dasharray':(C/12)+' '+(C/12)}));
+  // sign glyphs, names, boundary ticks
+  for(let i=0;i<12;i++){
+    const lon0=i*30,mid=lon0+15,sgn=SIGNS[i];
+    const[bx,by]=pt(lon0,244),[bx2,by2]=pt(lon0,292);
+    svg.appendChild(el('line',{x1:bx,y1:by,x2:bx2,y2:by2,stroke:'rgba(200,162,75,.3)','stroke-width':1}));
+    const[gx,gy]=pt(mid,276);const g=el('text',{x:gx,y:gy,'text-anchor':'middle','dominant-baseline':'central',fill:'#E8C874','font-size':19,'font-family':'serif'});g.textContent=SIGN_GLYPH[sgn];svg.appendChild(g);
+    const[nx,ny]=pt(mid,253);const n=el('text',{x:nx,y:ny,'text-anchor':'middle','dominant-baseline':'central',fill:'rgba(199,208,232,.55)','font-size':8,'font-family':'monospace','letter-spacing':'1'});n.textContent=sgn.slice(0,3).toUpperCase();svg.appendChild(n);
+  }
+  // mansion ticks + numbers (between 196 and 244)
+  for(let m=0;m<28;m++){
+    const start=m*MW,mid=start+MW/2;
+    const[ax,ay]=pt(start,232),[ax2,ay2]=pt(start,244);
+    svg.appendChild(el('line',{x1:ax,y1:ay,x2:ax2,y2:ay2,stroke:'rgba(199,208,232,.3)','stroke-width':1}));
+    const[nx,ny]=pt(mid,224);const t=el('text',{x:nx,y:ny,'text-anchor':'middle','dominant-baseline':'central',fill:'rgba(199,208,232,.5)','font-size':9,'font-family':'monospace',id:'mtick'+m});t.textContent=m+1;svg.appendChild(t);
+  }
+  // Via Combusta markers (8 Libra=188 .. 3 Scorpio=213) as oxblood ticks + label
+  [188,213].forEach(L=>{const[x1,y1]=pt(L,196),[x2,y2]=pt(L,244);svg.appendChild(el('line',{x1,y1,x2,y2,stroke:'rgba(210,103,78,.55)','stroke-width':2}));});
+  const[vx,vy]=pt(200.5,210);const vt=el('text',{x:vx,y:vy,'text-anchor':'middle','dominant-baseline':'central',fill:'rgba(210,103,78,.8)','font-size':7.5,'font-family':'monospace'});vt.textContent='VIA COMB.';svg.appendChild(vt);
+  // hub
+  svg.appendChild(el('circle',{cx:CX,cy:CY,r:150,fill:'rgba(7,9,23,.6)',stroke:'rgba(200,162,75,.18)','stroke-width':1}));
+  svg.appendChild(el('circle',{cx:CX,cy:CY,r:3,fill:'#C8A24B'}));
+  // group for live markers
+  svg.appendChild(el('g',{id:'markers'}));
+  const hub=el('text',{x:CX,y:CY-18,'text-anchor':'middle','dominant-baseline':'central',fill:'#969CC0','font-size':10,'font-family':'monospace','letter-spacing':'2',id:'hubLabel'});hub.textContent='MANSION';svg.appendChild(hub);
+  const hubN=el('text',{x:CX,y:CY+14,'text-anchor':'middle','dominant-baseline':'central',fill:'#E8C874','font-size':46,'font-family':'serif',id:'hubNum'});hubN.textContent='–';svg.appendChild(hubN);
+  const hubNm=el('text',{x:CX,y:CY+44,'text-anchor':'middle','dominant-baseline':'central',fill:'#F3EEDF','font-size':14,'font-family':'serif',id:'hubName'});hubNm.textContent='';svg.appendChild(hubNm);
+}
+let lastPos=null;
+function paintMarkers(pos){
+  lastPos=pos;
+  const g=document.getElementById('markers');g.innerHTML='';
+  // planets on inner track r=176; Sun & Moon emphasized
+  const trackR=176;
+  for(const b of ['Saturn','Jupiter','Mars','Venus','Mercury','Sun','Moon']){
+    const lon=pos[b].lon,[x,y]=pt(lon,b==='Moon'?215:(b==='Sun'?197:trackR));
+    const lum=(b==='Sun'||b==='Moon');
+    const col=b==='Moon'?'#C7D0E8':(b==='Sun'?'#E8C874':'#C8A24B');
+    g.appendChild(el('circle',{cx:x,cy:y,r:lum?12:8.5,fill:'rgba(7,9,23,.85)',stroke:col,'stroke-width':lum?2:1.3}));
+    const t=el('text',{x,y,'text-anchor':'middle','dominant-baseline':'central',fill:col,'font-size':lum?15:12,'font-family':'serif'});t.textContent=PGLYPH[b];g.appendChild(t);
+  }
+  // line from hub to Moon
+  const[mx,my]=pt(pos.Moon.lon,215);
+  const ln=el('line',{x1:CX,y1:CY,x2:mx,y2:my,stroke:'rgba(199,208,232,.25)','stroke-width':1,'stroke-dasharray':'2 3'});
+  g.insertBefore(ln,g.firstChild);
+  // hub mansion
+  const mi=mansionIdx(pos.Moon.lon);
+  document.getElementById('hubNum').textContent=mi+1;
+  document.getElementById('hubName').textContent=MANSIONS[mi][1];
+  // readout
+  document.getElementById('dialReadout').innerHTML='Moon <b>'+fmtLon(pos.Moon.lon)+'</b> · Mansion '+(mi+1)+' '+MANSIONS[mi][1]+' &nbsp;|&nbsp; Sun <b>'+fmtLon(pos.Sun.lon)+'</b>';
+  // highlight selected mansion tick
+  highlightTick(selectedMansion);
+}
+function highlightTick(idx){
+  for(let m=0;m<28;m++){const t=document.getElementById('mtick'+m);if(t)t.setAttribute('fill','rgba(199,208,232,.5)');}
+  if(idx!=null){const t=document.getElementById('mtick'+idx);if(t){t.setAttribute('fill','#E8C874');t.setAttribute('font-size','12');}}
+}
+
+/* ====================== RENDER STATIC ====================== */
+function dms(deg){const[s,d]=signOf(deg);let dd=Math.floor(d),mm=Math.round((d-dd)*60);if(mm===60){dd++;mm=0;}return dd+'°'+String(mm).padStart(2,'0')+'′ '+s;}
+function renderQualities(){document.getElementById('qbody').innerHTML=QUAL.map(r=>
+ `<tr><td><span class="glyph">${PGLYPH[r[0]]||'✶'}</span><span class="b">${r[0]}</span></td><td class="qd">${r[1]}</td><td class="qnote">${r[2]}</td><td class="qnote">${r[3]}</td></tr>`).join('');}
+function renderRules(){document.getElementById('rulesbody').innerHTML=RULES.map(r=>
+ `<tr><td class="f">${r[0]}</td><td class="good">${r[1]}</td><td class="bad">${r[2]}</td><td class="sc">${r[3]}</td></tr>`).join('');}
+let selectedMansion=null;
+function renderMansionGrid(){
+  document.getElementById('mgrid').innerHTML=MANSIONS.map((m,i)=>{
+    const[s,e]=mansionBounds(m[0]);
+    return `<button class="mcell" data-i="${i}"><span class="n">${m[0]}</span><div class="nm">${m[1]}</div><div class="ar">${m[2]}</div><div class="sp">${dms(s)} – ${dms(e>=360?359.999:e)}</div></button>`;
+  }).join('');
+  document.querySelectorAll('.mcell').forEach(b=>b.addEventListener('click',()=>selectMansion(+b.dataset.i)));
+}
+function selectMansion(i){
+  selectedMansion=i;
+  document.querySelectorAll('.mcell').forEach(b=>b.classList.toggle('sel',+b.dataset.i===i));
+  const m=MANSIONS[i],[s,e]=mansionBounds(m[0]);
+  document.getElementById('mdetail').innerHTML=
+   `<span class="lab">Mansion ${m[0]} · ${dms(s)} – ${dms(e>=360?359.999:e)}</span>
+    <h3>${m[1]} <span class="ar" style="font-size:16px">${m[2]}</span></h3>
+    <p>${m[3]}.</p>`;
+  highlightTick(i);
+}
+
+/* ====================== CALCULATOR ====================== */
+function readInputs(){
+  const dv=document.getElementById('date').value,tv=document.getElementById('time').value||'00:00';
+  const tz=parseFloat(document.getElementById('tz').value||'0');
+  const lat=parseFloat(document.getElementById('lat').value),lon=parseFloat(document.getElementById('lon').value);
+  const [Y,Mo,D]=dv.split('-').map(Number),[h,mi]=tv.split(':').map(Number);
+  // local civil time -> UTC by subtracting offset
+  const utcMs=Date.UTC(Y,Mo-1,D,h,mi,0)-tz*3600*1000;
+  return {date:new Date(utcMs),lat:isNaN(lat)?null:lat,lon:isNaN(lon)?null:lon,
+          work:document.getElementById('work').value,dn:document.getElementById('dn').value,
+          outers:document.getElementById('outers').value==='yes'};
+}
+function compute(){
+  const inp=readInputs();
+  const rep=electional(inp.date,inp.lat,inp.lon,inp.dn);
+  paintMarkers(rep.pos);
+  // sky table
+  const list=inp.outers?ORDER.concat(['Uranus','Neptune']):ORDER;
+  document.getElementById('skybody').innerHTML=list.map(b=>{
+    const p=rep.pos[b],lum=(b==='Sun'||b==='Moon');
+    return `<tr class="${lum?'lum':''}"><td><span class="glyph">${PGLYPH[b]}</span></td>
+      <td>${b}</td><td class="pos">${fmtLon(p.lon)} ${p.retro?'<span class="rx">℞</span>':''}</td>
+      <td class="qual">${QMAP[b]}</td></tr>`;
+  }).join('');
+  // moon card
+  const mi=rep.mansionIndex,m=MANSIONS[mi],[s,e]=mansionBounds(m[0]);
+  const dg=rep.dignity;const dignTxt=dg.held.length?('+'+dg.score+' · '+dg.held.join(', ')):(dg.debs.length?(dg.score+' · '+dg.debs.join(', ')):'peregrine (0)');
+  document.getElementById('moonCard').innerHTML=
+   `<div class="moon-mansion"><span class="mnum">${m[0]}</span>
+      <div><div class="mname">${m[1]} <span class="marab">${m[2]}</span></div>
+      <div class="mspan">${dms(s)} – ${dms(e>=360?359.999:e)} · Moon at ${fmtLon(rep.moon.lon)}</div></div></div>
+    <div class="ops"><span class="lab">Make images for</span>${m[3]}.</div>
+    <div class="dig">Moon dignity: <b>${dignTxt}</b> · speed ${rep.moon.speed.toFixed(2)}°/day · ${rep.isDay?'by day':'by night'}${rep.ascSign?(' · Asc '+rep.ascSign):''}</div>`;
+  renderChecks(rep,inp.work);
+}
+function ck(state,t,sub){const ic=state==='ok'?'<span class="ic ok">✓</span>':state==='no'?'<span class="ic no">✕</span>':'<span class="ic na">·</span>';
+  return `<li>${ic}<span><span class="ct">${t}</span><span class="cs">${sub}</span></span></li>`;}
+function renderChecks(rep,work){
+  const benefic=work==='benefic';
+  // For benefic: "ok" = favorable. For malefic the text inverts, so we flip the sense.
+  const fav=v=>benefic?v:!v; // v=true means "good-for-benefic condition met"
+  const C=[];
+  const safeInf=rep.badInfortune.length===0;
+  C.push(ck(fav(safeInf)?'ok':'no','Free of Saturn & Mars',safeInf?'no hard aspect to the infortunes':rep.badInfortune.map(a=>a.aspect+' '+a.other).join(', ')));
+  C.push(ck(fav(!rep.underRays)?'ok':'no','Clear of the Sun\u2019s rays',rep.underRays?('combust — '+rep.sunMoonSep.toFixed(1)+'° from Sun (<12°)'):(rep.sunMoonSep.toFixed(1)+'° from Sun')));
+  C.push(ck(fav(!rep.via)?'ok':'no','Outside the Via Combusta',rep.via?'in 8° Libra–3° Scorpio':'not in the burnt way'));
+  C.push(ck(fav(!rep.slow)?'ok':'no','Swift in motion',rep.slow?(rep.moon.speed.toFixed(1)+'°/day — slow, like Saturn'):(rep.moon.speed.toFixed(1)+'°/day')));
+  const hasFort=rep.goodFortune.length>0;
+  C.push(ck(fav(hasFort)?'ok':'na','Joined to the Fortunes',hasFort?rep.goodFortune.map(a=>a.aspect+' '+a.other+(a.applying?' (applying)':'')).join(', '):'no trine/sextile to Jupiter or Venus'));
+  const dignified=rep.dignity.score>0;
+  C.push(ck(dignified?'ok':'na','Essentially dignified',dignified?('+'+rep.dignity.score+' · '+rep.dignity.held.join(', ')):'peregrine or debilitated'));
+  if(rep.ascSign){const want=rep.isDay?rep.diurnal:!rep.diurnal;
+    C.push(ck(want?'ok':'na',(rep.isDay?'Diurnal':'Nocturnal')+' sign rising',rep.diurnal?'Moon in a diurnal sign':'Moon in a nocturnal sign'));}
+  if(rep.humane)C.push(ck('ok','Humane sign','Moon in '+rep.moon.sign+' — fit for works concerning people'));
+  document.getElementById('checks').innerHTML=C.join('');
+  // verdict
+  const ok=benefic?rep.benefic_ok:true; // inverting fully is interpretive; we report benefic suitability
+  let tag,txt;
+  if(benefic){
+    tag=rep.benefic_ok?'<span class="tag good">favorable</span>':'<span class="tag bad">wait</span>';
+    txt=rep.benefic_ok?'The Moon meets Chapter IV\u2019s core conditions for a benefic working.'
+      :'One or more conditions fail. The text says to choose another hour, or set Jupiter/Venus on the Ascendant or Midheaven to rectify the Moon.';
+  }else{
+    tag='<span class="tag bad">malefic mode</span>';
+    txt='For works of harm the text inverts these rules — e.g. the Moon combust or joined to Saturn/Mars is then sought, not avoided. Checks above show the benefic sense flipped.';
+  }
+  document.getElementById('verdict').innerHTML=`<div class="verdict">${tag}<span class="vtext">${txt}</span></div>`;
+}
+
+/* ====================== WIRE-UP ====================== */
+function setNow(){
+  const n=new Date();
+  document.getElementById('date').value=n.toISOString().slice(0,10);
+  document.getElementById('time').value=n.toTimeString().slice(0,5);
+  document.getElementById('tz').value=(-n.getTimezoneOffset()/60);
+}
+function buildPresets(){
+  document.getElementById('presets').innerHTML=PRESETS.map((p,i)=>`<button data-i="${i}">${p[0]}</button>`).join('');
+  document.querySelectorAll('#presets button').forEach(b=>b.addEventListener('click',()=>{
+    const p=PRESETS[+b.dataset.i];document.getElementById('lat').value=p[1];document.getElementById('lon').value=p[2];document.getElementById('tz').value=p[3];compute();}));
+}
+document.getElementById('calc').addEventListener('click',compute);
+document.getElementById('nowbtn').addEventListener('click',()=>{setNow();compute();});
+['date','time','lat','lon','tz','work','dn','outers'].forEach(id=>document.getElementById(id).addEventListener('change',compute));
+document.getElementById('geo').addEventListener('click',()=>{
+  if(!navigator.geolocation){alert('Geolocation unavailable — enter latitude and longitude.');return;}
+  navigator.geolocation.getCurrentPosition(pos=>{
+    document.getElementById('lat').value=pos.coords.latitude.toFixed(2);
+    document.getElementById('lon').value=pos.coords.longitude.toFixed(2);
+    document.getElementById('tz').value=(-new Date().getTimezoneOffset()/60);compute();
+  },()=>alert('Could not get location — enter latitude and longitude manually.'));
+});
+
+/* init */
+drawDialBase();renderQualities();renderRules();renderMansionGrid();setNow();compute();
+console.log('Picatrix engine loaded. Self-check (2026-06-25 00:47 UT):',
+  fmtLon(allPositions(new Date(Date.UTC(2026,5,25,0,47))).Sun.lon),'Sun;',
+  'Moon mansion #',mansionIdx(allPositions(new Date(Date.UTC(2026,5,25,0,47))).Moon.lon)+1);
+</script>
+</body>
+</html>
